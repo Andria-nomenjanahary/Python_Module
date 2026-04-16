@@ -5,6 +5,7 @@ def secure_archive(
     file_path: str, action: str = "r", file_content: str = ""
 ) -> tuple[bool, str]:
     is_success = False
+    content = ""
     try:
         with open(file_path, action) as file:
             if action == "r":
@@ -12,7 +13,7 @@ def secure_archive(
                 content = file.read()
             elif action == "w":
                 is_success = True
-                content = file.write(file_content)
+                file.write(file_content)
                 content = "Content successfully written to file"
     except FileNotFoundError as e:
         content = str(e)
@@ -31,6 +32,8 @@ if __name__ == "__main__":
     print("Using 'secure_archive' to read from a regular file:")
     content = secure_archive("ex3/ancient_fragment.txt")
     print(f"{content}\n")
-    content = content[-1]
+    actual_content = content[-1]
     print("Using 'secure_archive' to write previous content to a new file:")
-    print(f"{secure_archive("ex3/ancient_fragment1.txt", "w", content)}")
+    print(
+        f"{secure_archive("ex3/ancient_fragment1.txt", "w", actual_content)}"
+    )
