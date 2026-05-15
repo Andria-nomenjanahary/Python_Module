@@ -107,14 +107,41 @@ class LogProcessor(DataProcessor):
 
 class DataStream:
     def __init__(self) -> None:
-        self.storage: list[tuple[int, str]] = []
+        self.storage: list[DataProcessor] = []
 
     def register_processor(self, proc: DataProcessor) -> None:
-        pass
+        self.storage.append(proc)
 
-    def process_stream(self, stream: list[typing.Any]) -> None:
-        pass
+    def process_stream(self, stream: list[Any]) -> None:
+        for element in stream:
+            handled = False
+            for proc in self.storage:
+                if proc.validate(element):
+                    proc.ingest(element)
+                    handled = True
+                    break
+            if not handled:
+                print(
+                    "No processor can handle the element: "
+                    f"{element} (type:{type(element).__name__})"
+                )
 
     def print_processors_stats(self) -> None:
-        pass
+        if not self.storage:
+            print("No processor found, no data")
+            return
+        labels: dict[str, str] = {
+            "NumericProcessor": "NumericProcessor",
+            "TextProcessor": "Textprocessor",
+            "LogProcessor": "LogProcessor",
+        }
+        for proc in self.storage:
+            label = labels.get(type(proc).__name__, type(proc).__name__)
+            print(
+                f"{label}: total {proc.count} items processed, "
+                f"remaining {len(proc.storage)} on processor"
+            )
+
+if __name__ == "__main__":
+    print("=== Code Nexus - Data Stream ===\n")
 
