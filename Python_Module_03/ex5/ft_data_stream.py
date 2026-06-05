@@ -49,5 +49,5 @@ if __name__ == "__main__":
     print(f"Built list of 10 events: {backup}")
     consumer = consume_event(backup)
     for event in consumer:
-        print(f"Got even from list: {event}")
+        print(f"Got event from list: {event}")
         print(f"Remains in list: {backup}")

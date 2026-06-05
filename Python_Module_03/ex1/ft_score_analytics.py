@@ -4,12 +4,12 @@ import sys
 
 def score_analytics() -> None:
     i = 1
-    if len(sys.argv) == 1:
-        print(
-            "No scores provided. Usage: python3 "
-            "ft_score_analytics.py <score1> <score2> ..."
-        )
-        return
+    # if len(sys.argv) == 1:
+    #     print(
+    #         "No scores provided. Usage: python3 "
+    #         "ft_score_analytics.py <score1> <score2> ..."
+    #     )
+    #     return
     valid_arg: list[str] = []
     while i < len(sys.argv):
         try:
@@ -28,7 +28,7 @@ def score_analytics() -> None:
     else:
         scores: list[int] = []
         for item in valid_arg:
-            scores = scores + [int(item)]
+            scores += [int(item)]
         print(f"Scores processed: {scores}")
         print(f"Total players: {len(scores)}")
         print(f"Total score: {sum(scores)}")

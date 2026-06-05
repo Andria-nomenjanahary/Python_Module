@@ -62,7 +62,7 @@ class TextProcessor(DataProcessor):
                 raise ValueError(
                     f"Test invalid ingestion of string '{data}'"
                     " without prior validation:\n"
-                    "Got exception: Improper numeric data"
+                    "Got exception: Improper text data"
                 )
             self.count += 1
             self.storage.append((self.count, str(data)))
@@ -91,7 +91,7 @@ class LogProcessor(DataProcessor):
                 raise ValueError(
                     f"Test invalid ingestion of string '{data}'"
                     " without prior validation:\n"
-                    "Got exception: Improper numeric data"
+                    "Got exception: Improper log data"
                 )
             self.count += 1
             items = data if isinstance(data, list) else [data]

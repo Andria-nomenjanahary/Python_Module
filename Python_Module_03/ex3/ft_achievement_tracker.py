@@ -3,7 +3,7 @@ import random
 
 
 class Player:
-    def __init__(self, name: str, achievement: set[str]) -> None:
+    def __init__(self, name: str = "", achievement: set[str] = set()) -> None:
         self.name = name
         self.achievement = achievement
 
@@ -31,18 +31,22 @@ if __name__ == "__main__":
         "World Savior",
         "Collector Supreme",
         "Boss Slayer",
-        "Sharp mind",
+        "Sharp Mind",
         "Crafting Genius",
         "First Steps",
     ]
     names = ["Alice", "Bob", "Charlie", "Dylan"]
     players: list[Player] = []
+    distinct_achievements: set[str] = set()
+
     for n in names:
         achievements = gen_player_achievements(achievements_list)
-        players = players + [Player(n, achievements)]
+        players += [Player(n, achievements)]
     for p in players:
         p.show_player()
-    print(f"\nAll distinct achievements: {set(achievements_list)}\n")
+    for p in players:
+        distinct_achievements = distinct_achievements.union(p.achievement)
+    print(f"\nAll distinct achievements: {distinct_achievements}\n")
     if players:
         common: set[str] = set(players[0].achievement)
         for p in players[1:]:
@@ -54,10 +58,10 @@ if __name__ == "__main__":
         for other in players:
             if other is not p:
                 others = others.union(other.achievement)
-        unique: set[str] = p.achievement - others
+        unique: set[str] = p.achievement.difference(others)
         print(f"Only {p.name} has: {unique}")
 
     print()
     for p in players:
-        missing: set[str] = set(achievements_list) - p.achievement
+        missing: set[str] = set(achievements_list).difference(p.achievement)
         print(f"{p.name} is missing: {missing}")

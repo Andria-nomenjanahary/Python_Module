@@ -24,7 +24,7 @@ def arg_parsing() -> dict[str, int]:
                 raise Exception(f"Error - invalid parameter '{key}'")
 
             if key in dictionary:
-                raise Exception(f"Redundant item {key} - discarding")
+                raise Exception(f"Redundant item '{key}' - discarding")
 
             value: int = int(string_value)
             dictionary[key] = value

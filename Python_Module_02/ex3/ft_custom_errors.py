@@ -41,7 +41,7 @@ def check_garden(name: str, volume: int) -> None:
 
 if __name__ == "__main__":
     print("=== Custom Garden Errors Demo ===\n")
-    name = "Tomato"
+    name = "Strawberry"
     volume = 1
     try:
         print("Testing PlantError...")

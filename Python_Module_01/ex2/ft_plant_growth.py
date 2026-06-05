@@ -30,4 +30,4 @@ class Plant:
 if __name__ == "__main__":
     print("=== Garden Plant Growth ===")
     rose = Plant("Rose", 25, 30, 0.8)
-    rose.growth(7)
+    rose.growth(8)

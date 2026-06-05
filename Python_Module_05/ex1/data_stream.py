@@ -39,8 +39,10 @@ class NumericProcessor(DataProcessor):
                     " without prior validation:\n"
                     "Got exception: Improper numeric data"
                 )
-            self.count += 1
-            self.storage.append((self.count, str(data)))
+            items = data if isinstance(data, list) else [data]
+            for item in items:
+                self.count += 1
+                self.storage.append((self.count, str(item)))
         except ValueError as e:
             print(e)
 
@@ -64,8 +66,10 @@ class TextProcessor(DataProcessor):
                     " without prior validation:\n"
                     "Got exception: Improper numeric data"
                 )
-            self.count += 1
-            self.storage.append((self.count, str(data)))
+            items = data if isinstance(data, list) else [data]
+            for item in items:
+                self.count += 1
+                self.storage.append((self.count, str(item)))
         except ValueError as e:
             print(e)
 
@@ -80,7 +84,7 @@ class LogProcessor(DataProcessor):
 
         if is_valid_dict(data):
             return True
-        if isinstance(data, dict):
+        if isinstance(data, list):
             verif = all(is_valid_dict(x) for x in data)
             return verif
         return False
@@ -93,9 +97,8 @@ class LogProcessor(DataProcessor):
                     " without prior validation:\n"
                     "Got exception: Improper numeric data"
                 )
-            self.count += 1
             items = data if isinstance(data, list) else [data]
-
+            self.count += len(items)
             for item in items:
                 level = item.get("log_level", "UNKNOWN")
                 msg = item.get("log_message", "")
@@ -122,18 +125,19 @@ class DataStream:
                     break
             if not handled:
                 print(
-                    "No processor can handle the element: "
-                    f"{element} (type:{type(element).__name__})"
+                    "DataStream error - Can't process element in stream: "
+                    f"{element}"
                 )
 
     def print_processors_stats(self) -> None:
         if not self.storage:
-            print("No processor found, no data")
+            print("No processor found, no data\n")
             return
+        print("== DataStream statistics ==")
         labels: dict[str, str] = {
-            "NumericProcessor": "NumericProcessor",
-            "TextProcessor": "Textprocessor",
-            "LogProcessor": "LogProcessor",
+            "NumericProcessor": "Numeric Processor",
+            "TextProcessor": "Text Processor",
+            "LogProcessor": "Log Processor",
         }
         for proc in self.storage:
             label = labels.get(type(proc).__name__, type(proc).__name__)
@@ -142,6 +146,56 @@ class DataStream:
                 f"remaining {len(proc.storage)} on processor"
             )
 
+
 if __name__ == "__main__":
     print("=== Code Nexus - Data Stream ===\n")
 
+    info: list[Any] = [
+        'Hello world',
+        [3.14, -1, 2.71],
+        [
+            {
+                'log_level': 'WARNING',
+                'log_message': 'Telnet access! Use ssh instead'
+            },
+            {'log_level': 'INFO', 'log_message': 'User wil is connected'},
+        ],
+        42,
+        ['Hi', 'five'],
+    ]
+
+    data = DataStream()
+
+    print("Initialize Data Stream...")
+
+    data.print_processors_stats()
+
+    print("Registering Numeric processor\n")
+    data.register_processor(NumericProcessor())
+    print(f"Send first batch of data on stream: {info}\n")
+
+    data.process_stream(info)
+
+    data.print_processors_stats()
+    print()
+    print("Registering other data processors")
+    data.register_processor(TextProcessor())
+    data.register_processor(LogProcessor())
+
+    print("Send the same batch again")
+    data.process_stream(info)
+
+    data.print_processors_stats()
+
+    print(
+        "\nConsume some elements from the data processors: "
+        "Numeric 3, Text 2, Log 1"
+    )
+    for _ in range(3):
+        data.storage[0].output()
+    for _ in range(2):
+        data.storage[1].output()
+    for _ in range(1):
+        data.storage[2].output()
+
+    data.print_processors_stats()

@@ -2,65 +2,48 @@
 import math
 
 
-def get_input(prompt: str) -> tuple[float, float, float] | None:
-    user_input: str = input(prompt)
-
-    if user_input.count(",") != 2:
-        print("Invalid syntax")
-        return None
-
-    segments: list[str] = user_input.split(",")
-    float_numbers: tuple[float, ...] = ()
-
-    for segment in segments:
-        cleaned: str = segment.strip()
+def get_player_pos() -> tuple[float, float, float]:
+    while True:
         try:
-            float_numbers += (float(cleaned),)
+            user_input: str = input(
+                "Enter new coordinates as floats in format 'x,y,z': "
+            )
+            parts: list[str] = user_input.split(",")
+            if len(parts) != 3:
+                print("Invalid syntax")
+                continue
+
+            x, y, z = (float(p.strip()) for p in parts)
+            return x, y, z
+
         except ValueError as e:
-            print(f"Error on parameter '{cleaned}': {e}")
-            return None
-        except Exception as e:
-            print(f"Error: {e}")
-            return None
-
-    if len(float_numbers) == 3:
-        return (float_numbers[0], float_numbers[1], float_numbers[2])
-
-    print("Invalid syntax")
-    return None
+            err_msg = str(e).split(":")[-1].strip()
+            print(f"Error on parameter {err_msg}: {e}")
+            continue
 
 
-def position(label: str) -> tuple[float, float, float]:
-    if label == "first" or label == "second":
-        print(f"Get a {label} set of coordinates")
-    coords = get_input("Enter new coordinates as floats in format 'x,y,z': ")
-    if coords is None:
-        return position(label)
+def main() -> None:
+    print("=== Game Coordinate System ===\n")
 
-    if label == "first":
-        print(f"Got a first tuple: {coords}")
-        print(f"It includes: X={coords[0]}, Y={coords[1]}, Z={coords[2]}")
-        dist_to_center = math.sqrt(
-            (coords[0]) ** 2 + (coords[1] ** 2) + (coords[2] ** 2)
-        )
-        print(f"Distance to center: {round(dist_to_center, 4)}")
-    return coords
+    print("Get a first set of coordinates")
+    x1, y1, z1 = get_player_pos()
+    print(f"Got a first tuple: {(x1, y1, z1)}")
+    print(f"It includes: X={x1}, Y={y1}, Z={z1}")
 
+    dist_to_center: float = math.sqrt(x1**2 + y1**2 + z1**2)
+    print(f"Distance to center: {round(dist_to_center, 4)}")
 
-def get_player_pos() -> None:
-    first_set = position("first")
-    second_set = position("second")
-    dist_to_center = math.sqrt(
-        (second_set[0] - first_set[0]) ** 2
-        + (second_set[1] - first_set[1]) ** 2
-        + (second_set[2] - first_set[2]) ** 2
+    print("\nGet a second set of coordinates")
+    x2, y2, z2 = get_player_pos()
+
+    dist_between: float = math.sqrt(
+        (x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2
     )
+
     print(
-        "Distance between the 2 sets of coordinates:"
-        f" {round(dist_to_center, 4)}"
+        f"Distance between the 2 sets of coordinates: {round(dist_between, 4)}"
     )
 
 
 if __name__ == "__main__":
-    print("=== Game Coordinate System ===\n")
-    get_player_pos()
+    main()
