@@ -25,7 +25,7 @@ def spell_combiner(
     def combine(target: str, power: int) -> tuple[str, str]:
         fact1 = spell1(target, power)
         fact2 = spell2(target, power)
-        return [fact1, fact2]
+        return (fact1, fact2)
     return combine
 
 
@@ -38,6 +38,7 @@ def power_amplifier(
             power: int
             ) -> str:
         result = power * multiplier
+        print(f"Oroginal: {power}, amplified: {result}")
         return base_spell(target, result)
     return amplified_spell
 
@@ -69,9 +70,11 @@ if __name__ == "__main__":
     lists_0 = report_0("house", 40)
     print(f"Combined spell result: {lists_0[0]}, {lists_0[1]}\n")
 
+    print("Testing amplifier...")
     report_1 = power_amplifier(attack, 4)
     print(f"{report_1("village", 40)}\n")
 
+    print("Testing caster...")
     report_2 = conditional_caster(is_rainny, spell_weather)
     print(f"{report_2("village", "rainny")}\n")
 

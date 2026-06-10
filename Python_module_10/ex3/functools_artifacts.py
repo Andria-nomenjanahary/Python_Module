@@ -60,9 +60,12 @@ def spell_dispatcher() -> Callable[[Any], str]:
 
     @base.register(list)
     def _(param: list[Any]) -> str:
-        for i in range(len(param)):
-            i += 1
-        return f"Multi-cast: {i} spells"
+        try:
+            for i in range(len(param)):
+                i += 1
+            return f"Multi-cast: {i} spells"
+        except Exception:
+            return "Error: Multi-cast: 0 spell"
     return base
 
 
@@ -104,4 +107,4 @@ if __name__ == "__main__":
     print(dispatcher(42))
     print(dispatcher("Abdacadabra"))
     print(dispatcher(["Abdacadabra", "lorem", "Mine"]))
-    print(dispatcher({"key": "value"}))
+    print(dispatcher({"Abdacadabra", 12}))

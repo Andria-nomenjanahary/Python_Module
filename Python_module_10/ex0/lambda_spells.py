@@ -65,13 +65,17 @@ if __name__ == "__main__":
         {"name": "Crystall Orb", "power": 85},
         {"name": "Fire Staff", "power": 92}
     ]
-    sorted_artifact = artifact_sorter(artifacts)
-    print(
-        f"{sorted_artifact[0].get('name')}"
-        f" ({sorted_artifact[0].get('power')})"
-        f" comes before {sorted_artifact[1].get('name')}"
-        f" ({sorted_artifact[1].get('power')})"
-        )
+    try:
+        sorted_artifact = artifact_sorter(artifacts)
+        print(
+            f"{sorted_artifact[0].get('name')}"
+            f" ({sorted_artifact[0].get('power')})"
+            f" comes before {sorted_artifact[1].get('name')}"
+            f" ({sorted_artifact[1].get('power')})"
+            )
+    except Exception as e:
+        print(f"No parameter to compare...Error: {e}")
+
     spells = [
         "Abdacadabra",
         "Lorem",

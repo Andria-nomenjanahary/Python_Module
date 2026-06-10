@@ -18,7 +18,7 @@ def mage_counter() -> Callable[[], int]:
 
 
 def spell_accumulator(initial_power: int) -> Callable[[int], int]:
-    count = 0
+    count = initial_power
 
     def accumulator(data: int) -> int:
         nonlocal count
@@ -59,9 +59,9 @@ if __name__ == "__main__":
 
     print("Testing spell accumulator...")
     base = 100
-    merlin_acc = spell_accumulator(base)
+    merlin_acc = spell_accumulator(100)
     days = 20
-    print(f"Base: {merlin_acc(base)}, add {days}: {merlin_acc(days)}")
+    print(f"Base: {base}, add {days}: {merlin_acc(days)}")
     days = 30
     print(f"Base: {base}, add {days}: {merlin_acc(days)}\n")
 
